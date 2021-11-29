@@ -4,21 +4,21 @@ import java.util.Arrays;
 
 class Main {
     public static void main(String[] args) {
-        int count = 0;
-        boolean isGreenLight = true;
-        int[] speedOfPlayers = {0, 3, 5, 0, 0, 1, 0};
-        int losers = numberOfDropouts(speedOfPlayers, isGreenLight);
+        int maxSpeed = 5;
+        boolean isGreenLight = false;
+        int[] speedOfPlayers = {0, 3, 6, 0, 4, -8, 1};
+        int losers = numberOfDropouts(speedOfPlayers, isGreenLight, maxSpeed);
         System.out.println(losers);
-        System.out.println(Arrays.toString(speedOfDropouts(speedOfPlayers, isGreenLight)));
-        System.out.println(Arrays.toString(speedOfWinners(speedOfPlayers, isGreenLight)));
+        System.out.println(Arrays.toString(speedOfDropouts(speedOfPlayers, isGreenLight, maxSpeed)));
+        System.out.println(Arrays.toString(speedOfWinners(speedOfPlayers, isGreenLight, maxSpeed)));
 
     }
 
-    public static int numberOfDropouts(int[] players, boolean isGreen) {
+    public static int numberOfDropouts(int[] players, boolean isGreen, int speed) {
         int dropout = 0;
         if (!isGreen) {
             for (int player : players) {
-                if (player > 0 || player < 0) {
+                if (player > speed || player < -speed) {
                     dropout++;
                 }
             }
@@ -28,13 +28,13 @@ class Main {
         return dropout;
     }
 
-    public static int[] speedOfDropouts(int[] players, boolean isGreen) {
-        int n = numberOfDropouts(players, isGreen);
+    public static int[] speedOfDropouts(int[] players, boolean isGreen, int speed) {
+        int n = numberOfDropouts(players, isGreen, speed);
         int[] speedOfLosers = new int[n];
         int i = 0;
         if (!isGreen) {
             for (int player : players) {
-                if (player > 0 || player < 0) {
+                if (player > speed || player < -speed) {
                     speedOfLosers[i] = player;
                     if (i > n) {
                         break;
@@ -46,13 +46,13 @@ class Main {
         return speedOfLosers;
     }
 
-    public static int[] speedOfWinners(int[] players, boolean isGreen) {
-        int n = players.length - numberOfDropouts(players, isGreen);
+    public static int[] speedOfWinners(int[] players, boolean isGreen, int speed) {
+        int n = players.length - numberOfDropouts(players, isGreen, speed);
         int[] speedOfZero = new int[n];
         int i = 0;
         if (!isGreen) {
             for (int player : players) {
-                if (player == 0) {
+                if (player >= -speed && player <= speed) {
                     speedOfZero[i] = player;
                     if (i > n) {
                         break;
